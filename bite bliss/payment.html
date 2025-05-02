@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment - Snack Menu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: radial-gradient(circle at center, #fdf6f0, #eecfc8);
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen font-sans text-burgundy">
+
+  <!-- Header -->
+  <header class="text-center py-10 bg-red-900 text-white">
+    <h1 class="text-4xl font-extrabold tracking-wide uppercase">Payment Details</h1>
+  </header>
+
+  <!-- Order + User Form Section -->
+  <section class="max-w-2xl mx-auto px-4 py-12 space-y-6 bg-white shadow-xl rounded-xl border border-red-900 mt-8">
+    <h2 class="text-2xl font-bold">🛒 Your Order</h2>
+    <pre id="order-summary" class="text-sm text-gray-700"></pre>
+
+    <form id="payment-form" onsubmit="processPayment(event)">
+      <input type="text" id="name" placeholder="Your Name" required class="w-full border border-red-900 rounded px-4 py-2 mb-3" />
+      <textarea id="address" rows="3" placeholder="Your Address" required class="w-full border border-red-900 rounded px-4 py-2 mb-3"></textarea>
+      <input type="tel" id="phone" placeholder="Phone Number" required class="w-full border border-red-900 rounded px-4 py-2 mb-3" />
+<input type="text" id="Date" placeholder="Date Of Delivery" required class="w-full border border-red-900 rounded px-4 py-2 mb-3" />
+      <button type="submit" class="bg-red-900 text-white px-6 py-2 rounded hover:bg-opacity-90 transition w-full mt-4">Proceed to Payment</button>
+
+    </form>
+  </section>
+
+  <!-- Payment Details Section -->
+  <section id="payment-details" class="hidden max-w-2xl mx-auto px-4 py-12 space-y-6 bg-yellow-50 shadow-xl rounded-xl border border-red-900 mt-10">
+    <h3 class="text-2xl font-bold text-center">💳 Payment Options</h3>
+    <p class="text-center">Use the UPI ID or scan the QR code to pay.</p>
+
+    <div class="text-center">
+      <p class="font-bold text-lg">Amount: ₹<span id="amount-due">0.00</span></p>
+      <p class="font-semibold text-xl mt-2">UPI ID: wasmia.naaz@okicici</p>
+      
+      <!-- Replace with actual QR Code -->
+      <img src="qr.jpg" alt="Scan QR to Pay" class="mx-auto mt-6 rounded shadow w-40" />
+      
+      <button onclick="confirmOrder()" class="mt-6 bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 transition">
+        ✅ I've Paid — Confirm Order
+      </button>
+    </div>
+  </section>
+
+  <footer class="text-center text-sm text-burgundy mt-12 mb-6 italic">
+    www.BiteLoom.com
+  </footer>
+
+  <script>
+   document.addEventListener("DOMContentLoaded", () => {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
+
+  document.getElementById("order-summary").textContent = cart.map((item, i) =>
+    `${i + 1}. ${item.item} - ₹${item.price.toFixed(2)}`
+  ).join("\n");
+
+  document.getElementById("amount-due").textContent = totalAmount.toFixed(2);
+
+  // Attach confirmOrder to global scope
+  window.confirmOrder = function () {
+    const name = document.getElementById('name').value.trim();
+    const address = document.getElementById('address').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+
+    if (!name || !address || !phone) {
+      alert("Please fill all the details before confirming the order.");
+      return;
+    }
+
+    let message = `Hi, I would like to place an order.%0A%0A`;
+    message += `*User Information*%0AName: ${name}%0AAddress: ${address}%0APhone: ${phone}%0A%0A`;
+    message += `*Order Details*%0A`;
+    cart.forEach((entry, i) => {
+      message += `${i + 1}. ${entry.item} - ₹${entry.price.toFixed(2)}%0A`;
+    });
+    message += `%0A*Total: ₹${totalAmount.toFixed(2)}*%0A%0A✅ *Payment Successful via UPI*`;
+
+    const phoneNumber = "8248080258";
+    const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
+    window.open(whatsappURL, '_blank');
+    localStorage.removeItem('cart');
+  };
+
+  // Attach processPayment to global scope
+  window.processPayment = function (e) {
+    e.preventDefault();
+    document.getElementById("payment-details").classList.remove("hidden");
+    window.scrollTo({ top: document.getElementById("payment-details").offsetTop, behavior: "smooth" });
+  };
+});
+
+
+    function processPayment(e) {
+      e.preventDefault();
+      document.getElementById("payment-details").classList.remove("hidden");
+      window.scrollTo({ top: document.getElementById("payment-details").offsetTop, behavior: "smooth" });
+    }
+
+    function confirmOrder() {
+      const name = document.getElementById('name').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+
+      if (!name || !address || !phone) {
+        alert("Please fill all the details before confirming the order.");
+        return;
+      }
+
+      let message = `Hi, I would like to place an order.%0A%0A`;
+      message += `*User Information*%0AName: ${name}%0AAddress: ${address}%0APhone: ${phone}%0A%0A`;
+      message += `*Order Details*%0A`;
+      cart.forEach((entry, i) => {
+        message += `${i + 1}. ${entry.item} - ₹${entry.price.toFixed(2)}%0A`;
+      });
+      message += `%0A*Total: ₹${totalAmount.toFixed(2)}*%0A%0A✅ *Payment Successful via UPI*`;
+
+      const phoneNumber = "8248080258"; // your WhatsApp number
+      const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
+      window.open(whatsappURL, '_blank');
+localStorage.removeItem('cart');
+    }
+  </script>
+
+</body>
+</html>        
