@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment - Snack Menu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: radial-gradient(circle at center, #fdf6f0, #eecfc8);
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen font-sans text-burgundy">
+
+  <!-- Header -->
+  <header class="text-center py-10 bg-red-900 text-white">
+    <h1 class="text-4xl font-extrabold tracking-wide uppercase">Payment Details</h1>
+  </header>
+
+  <!-- Order + User Form Section -->
+  <section class="max-w-2xl mx-auto px-4 py-12 space-y-6 bg-white shadow-xl rounded-xl border border-red-900 mt-8">
+    <h2 class="text-2xl font-bold">🛒 Your Order</h2>
+    <pre id="order-summary" class="text-sm text-gray-700"></pre>
+
+    <form id="payment-form" onsubmit="processPayment(event)">
+      <input type="text" id="name" placeholder="Your Name" required class="w-full border border-red-900 rounded px-4 py-2 mb-3" />
+      <textarea id="address" rows="3" placeholder="Your Address" required class="w-full border border-red-900 rounded px-4 py-2 mb-3"></textarea>
+      <input type="tel" id="phone" placeholder="Phone Number" pattern="[0-9]{10}" required class="w-full border border-red-900 rounded px-4 py-2 mb-3" />
+      <input type="text" id="Date" placeholder="Date Of Delivery (DD-MM-YYYY)" pattern="\d{2}-\d{2}-\d{4}" required class="w-full border border-red-900 rounded px-4 py-2 mb-3" />
+      <button type="submit" class="bg-red-900 text-white px-6 py-2 rounded hover:bg-opacity-90 transition w-full mt-4">
+        Proceed to Payment
+      </button>
+    </form>
+  </section>
+
+  <!-- Payment Details Section -->
+  <section id="payment-details" class="hidden max-w-2xl mx-auto px-4 py-12 space-y-6 bg-yellow-50 shadow-xl rounded-xl border border-red-900 mt-10">
+    <h3 class="text-2xl font-bold text-center">💳 Payment Options</h3>
+    <p class="text-center">Use the UPI ID or scan the QR code to pay.</p>
+
+    <div class="flex flex-col items-center space-y-3 mt-4">
+      <img src="qr.jpg" alt="QR Code" class="w-48 h-48 border-4 border-red-900 rounded-lg shadow-md" />
+      <p class="text-sm text-gray-800 font-medium">UPI ID: <span class="font-semibold">wasmia.naaz@okicici</span></p>
+    </div>
+
+    <div class="text-center mt-4">
+      <label class="inline-flex items-center">
+        <input type="checkbox" id="paid-checkbox" class="mr-2">
+        <span class="text-sm">I have completed the UPI payment</span>
+      </label>
+
+      <p id="payment-reminder" class="text-sm text-red-700 font-semibold mt-3 animate-pulse">
+         After payment, please return here and click "Confirm Order" to complete your order.
+      </p>
+
+      <button onclick="confirmOrder()" class="mt-4 bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 transition">
+        ✅ I've Paid — Confirm Order
+      </button>
+    </div>
+  </section>
+
+  <footer class="text-center text-sm text-burgundy mt-12 mb-6 italic">
+    www.BiteLoom.com
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const orderSummary = document.getElementById("order-summary");
+
+      if (cart.length === 0) {
+        orderSummary.textContent = "Your cart is empty.";
+        return;
+      }
+
+      let total = 0;
+      orderSummary.textContent = cart.map((item, i) => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        return `${i + 1}. ${item.name} (${item.flavour}) - Qty: ${item.quantity} = ₹${item.price} x ${item.quantity} = ₹${itemTotal}`;
+      }).join("\n") + `\n\nTotal: ₹${total}`;
+
+      // Show reminder when user returns to tab
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+          alert("🔔 Welcome back! Please click 'Confirm Order' if you've completed the payment.");
+        }
+      });
+
+      window.processPayment = function (e) {
+        e.preventDefault();
+
+        // Validate manually in case pattern fails silently
+        const name = document.getElementById('name').value.trim();
+        const address = document.getElementById('address').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const date = document.getElementById('Date').value.trim();
+
+        if (!name || !address || !phone || !date) {
+          alert("Please fill all the fields correctly.");
+          return;
+        }
+
+        if (!/^[0-9]{10}$/.test(phone)) {
+          alert("Phone number must be 10 digits.");
+          return;
+        }
+
+        if (!/^\d{2}-\d{2}-\d{4}$/.test(date)) {
+          alert("Please enter date in DD-MM-YYYY format.");
+          return;
+        }
+
+        document.getElementById("payment-details").classList.remove("hidden");
+        window.scrollTo({ top: document.getElementById("payment-details").offsetTop, behavior: "smooth" });
+
+        alert("📢 Reminder:\nAfter you make the payment using UPI, please return to this page and click 'Confirm Order' to complete your order.");
+      };
+
+      window.confirmOrder = function () {
+        const name = document.getElementById('name').value.trim();
+        const address = document.getElementById('address').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const deliveryDate = document.getElementById('Date').value.trim();
+        const paidCheckbox = document.getElementById('paid-checkbox');
+
+        if (!paidCheckbox.checked) {
+          alert("Please confirm that you've made the payment.");
+          return;
+        }
+
+        let message = `Hi, I would like to place an order.%0A%0A`;
+        message += `*User Information*%0AName: ${name}%0AAddress: ${address}%0APhone: ${phone}%0ADelivery Date: ${deliveryDate}%0A%0A`;
+        message += `*Order Details*%0A`;
+
+        let totalAmount = 0;
+        cart.forEach((entry, i) => {
+          const itemTotal = entry.price * entry.quantity;
+          totalAmount += itemTotal;
+          message += `${i + 1}. ${entry.name} (${entry.flavour}) - Qty: ${entry.quantity} = ₹${entry.price} x ${entry.quantity} = ₹${itemTotal}%0A`;
+        });
+
+        message += `%0A*Total: ₹${totalAmount}*%0A%0A✅ *Payment Successful via UPI*`;
+
+        const phoneNumber = "8248080258";
+        const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
+        window.open(whatsappURL, '_blank');
+        localStorage.removeItem('cart');
+      };
+    });
+  </script>
+</body>
+</html>

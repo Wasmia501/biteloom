@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Snack Menu with Cart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            burgundy: '#8b0000',
+            cream: '#fdf6f0'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    button {
+      background-color: #800020; /* Burgundy */
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      opacity: 0.8;
+    }
+
+    .clicked {
+      background-color: #ffd1dc !important; /* Light pastel pink */
+      color: #800020 !important;            /* Burgundy text */
+    }
+
+  </style>
+<style>
+  #toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    visibility: hidden;
+  }
+
+  #toast.show {
+    visibility: visible;
+    opacity: 1;
+  }
+<!-- Toast Notification -->
+<div id="toast" class="hidden fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-md shadow-lg">
+  Item added to cart!
+</div>
+
+</style>
+<!-- Toast Notification -->
+<div id="toast" class="hidden fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-md shadow-lg">
+  Item added to cart!
+</div>
+
+
+</head>
+<body class="min-h-screen font-sans text-burgundy">
+  <!-- Header -->
+  <header class="text-center py-10 bg-burgundy text-cream">
+    <h1 class="text-4xl font-extrabold tracking-wide uppercase mx-auto">Our Savory Menu</h1>
+    <p class="mt-2 text-sm italic">Homemade goodness in every bite</p>
+    <!-- Search Bar -->
+    <form id="search-form" class="relative w-60 mx-auto mt-4">
+      <inputtype="text"id="search-input"placeholder="Search..."class="px-4 py-2 rounded-full border-2 border-burgundy text-burgundy w-full focus:outline-none focus:ring-2 focus:ring-burgundy"/>
+      <button type="submit" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-burgundy hover:text-burgundy focus:outline-none">
+        <!-- Magnifying Glass Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M16.65 10.35A6.3 6.3 0 1110.35 4a6.3 6.3 0 016.3 6.3z" />
+        </svg>
+      </button>
+    </form>
+  </header>
+
+  <!-- Menu Section -->
+  <section class="max-w-5xl mx-auto px-4 py-12 space-y-10">
+    <div class="grid gap-8">
+
+      <!-- Menu Items -->
+      <div class="menu-container">
+
+        <!-- Tres Leches Cake -->
+        <div class="menu-item flex flex-col sm:flex-row bg-cream rounded-xl border border-burgundy shadow-md hover:scale-[1.01] transition">
+          <img src="w.jpg" class="sm:w-1/2 w-full object-cover rounded-t-xl sm:rounded-l-xl sm:rounded-tr-none" alt="Wrap" />
+          <div class="p-5 flex flex-col justify-between">
+            <div>
+              <h3 class="text-xl font-bold uppercase">Wrap</h3>
+              <p class="text-sm mt-2 text-gray-700">"Soft tortilla wrap with savory filling.!"</p>
+              <p class="text-sm text-gray-600 mt-1">Quantity: 1 piece/pack</p>
+              <label class="block mt-3 text-sm font-medium">Choose flavour:</label>
+              <select id="wrap-select" class="bg-burgundy text-white px-3 py-1 rounded text-sm font-semibold">
+                <option value="Veg:100">Veg – ₹100</option>
+                <option value="Non-veg:130">Non-veg– ₹130</option>
+                
+              </select>
+            </div>
+            <div class="mt-4 flex items-center space-x-3">
+              <input type="number" min="0" value="0" class="quantity w-16 px-2 py-1 border border-burgundy rounded text-center text-burgundy font-semibold" id="wrap-qty" />
+              <button onclick="addToCartWithQty('Wrap', 'wrap-select', 'wrap-qty')" class="bg-burgundy text-white px-4 py-1 rounded">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- brownie -->
+        <div class="menu-item flex flex-col sm:flex-row bg-cream rounded-xl border border-burgundy shadow-md hover:scale-[1.01] transition">
+          <img src="pani.jpg" class="sm:w-1/2 w-full object-cover rounded-t-xl sm:rounded-l-xl sm:rounded-tr-none" alt="Pani Puri" />
+          <div class="p-5 flex flex-col justify-between">
+            <div>
+              <h3 class="text-xl font-bold uppercase">Pani Puri</h3>
+              <p class="text-sm mt-2 text-gray-700">"Crispy shells filled with spicy water.!"</p>
+              <p class="text-sm text-gray-600 mt-1">Quantity: 8 piece/pack</p>
+              <label class="block mt-3 text-sm font-medium">Choose Type:</label>
+              <select id="panipuri-select" class="bg-burgundy text-white px-3 py-1 rounded text-sm font-semibold">
+               <option value="Classic:40">Classic– ₹40</option>
+        
+
+              </select>
+            </div>
+            <div class="mt-4 flex items-center space-x-3">
+              <input type="number" min="0" value="0" class="quantity w-16 px-2 py-1 border border-burgundy rounded text-center text-burgundy font-semibold" id="panipuri-qty" />
+              <button onclick="addToCartWithQty('Pani Puri', 'panipuri-select', 'panipuri-qty', 40)" class="bg-burgundy text-white px-4 py-1 rounded">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Doughnuts -->
+        <div class="menu-item flex flex-col sm:flex-row bg-cream rounded-xl border border-burgundy shadow-md hover:scale-[1.01] transition">
+          <img src="n.jpg" class="sm:w-1/2 w-full object-cover rounded-t-xl sm:rounded-l-xl sm:rounded-tr-none" alt="Nugget" />
+          <div class="p-5 flex flex-col justify-between">
+            <div>
+              <h3 class="text-xl font-bold uppercase">Nugget</h3>
+              <p class="text-sm mt-2 text-gray-700">"Crispy golden nuggets with juicy center.
+!"</p>
+              <p class="text-sm text-gray-600 mt-1">Quantity: 6 piece/pack</p>
+              <label class="block mt-3 text-sm font-medium">Choose flavour:</label>
+              <select id="nugget-select" class="bg-burgundy text-white px-3 py-1 rounded text-sm font-semibold">
+                <option value="Veg:60">Veg – ₹60</option>
+                <option value="Non-veg:80">Non-veg– ₹80</option>
+                              </select>
+            </div>
+            <div class="mt-4 flex items-center space-x-3">
+              <input type="number" min="0" value="0" class="quantity w-16 px-2 py-1 border border-burgundy rounded text-center text-burgundy font-semibold" id="nugget-qty" />
+              <button onclick="addToCartWithQty('Nugget', 'nugget-select', 'nugget-qty', 120)" class="bg-burgundy text-white px-4 py-1 rounded">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kinathapam -->
+        <div class="menu-item flex flex-col sm:flex-row bg-cream rounded-xl border border-burgundy shadow-md hover:scale-[1.01] transition">
+          <img src="bur.jpg" class="sm:w-1/2 w-full object-cover rounded-t-xl sm:rounded-l-xl sm:rounded-tr-none" alt="Burger" />
+          <div class="p-5 flex flex-col justify-between">
+            <div>
+              <h3 class="text-xl font-bold uppercase">Burger</h3>
+              <p class="text-sm mt-2 text-gray-700">"A traditional South Indian dessert made with sweetened milk and cardamom."</p>
+              <p class="text-sm text-gray-600 mt-1">Quantity: 1 piece/pack</p>
+              <label class="block mt-3 text-sm font-medium">Choose flavour:</label>
+              <select id="burger-select" class="bg-burgundy text-white px-3 py-1 rounded text-sm font-semibold">
+                <option value="Veg:100">Veg – ₹100</option>
+ <option value="Chicken:120">Chicken – ₹120</option>
+
+                
+              </select>
+            </div>
+            <div class="mt-4 flex items-center space-x-3">
+              <input type="number" min="0" value="0" class="quantity w-16 px-2 py-1 border border-burgundy rounded text-center text-burgundy font-semibold" id="burger-qty" />
+              <button onclick="addToCartWithQty('Burger', 'burger-select', 'burger-qty')" class="bg-burgundy text-white px-4 py-1 rounded">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Momos -->
+        <div class="menu-item flex flex-col sm:flex-row bg-cream rounded-xl border border-burgundy shadow-md hover:scale-[1.01] transition">
+          <img src="momo.jpg" class="sm:w-1/2 w-full object-cover rounded-t-xl sm:rounded-l-xl sm:rounded-tr-none" alt="Momos" />
+          <div class="p-5 flex flex-col justify-between">
+            <div>
+              <h3 class="text-xl font-bold uppercase">Momos</h3>
+              <p class="text-sm mt-2 text-gray-700">"Steamed dumplings filled with savory goodness – perfect for any snack time!"</p>
+              <p class="text-sm text-gray-600 mt-1">Quantity: 6 pieces/pack</p>
+              <label class="block mt-3 text-sm font-medium">Choose flavour:</label>
+              <select id="momos-select" class="bg-burgundy text-white px-3 py-1 rounded text-sm font-semibold">
+               <option value="Steamed Veg:80">Steamed Veg – ₹80</option>
+        <option value="Steamed Chicken:90">Steamed Chicken – ₹90</option>
+        <option value="Fried Veg:90">Fried Veg – ₹90</option>
+        <option value="Fried Chicken:120">Fried Chicken – ₹120</option>
+              </select>
+            </div>
+            <div class="mt-4 flex items-center space-x-3">
+              <input type="number" min="0" value="0" class="quantity w-16 px-2 py-1 border border-burgundy rounded text-center text-burgundy font-semibold" id="momos-qty" />
+              <button onclick="addToCartWithQty('Momos', 'momos-select', 'momos-qty')" class="bg-burgundy text-white px-4 py-1 rounded">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+       
+
+  </section>
+
+  <!-- Cart Section -->
+  <section class="max-w-2xl mx-auto px-4 py-10 bg-white shadow-xl rounded-xl border border-burgundy mt-10">
+    <h2 class="text-2xl font-bold mb-4 text-burgundy">🛒 Your Cart</h2>
+    <ul id="cart-items" class="space-y-3"></ul>
+    <div class="mt-6">
+  <p class="font-semibold text-lg text-burgundy">Total: <span id="total-amount">₹0</span></p>
+</div>
+<div class="mt-4 flex justify-center">
+  <a href="payment.html" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-full transition">
+    Proceed to Payment
+  </a>
+</div>
+
+
+      </section>
+
+  <script>
+  
+  localStorage.clear()
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  // Add item to cart with quantity
+  function addToCartWithQty(itemName, selectId, qtyId) {
+    const selectElement = document.getElementById(selectId);
+    const qtyElement = document.getElementById(qtyId);
+    const quantity = parseInt(qtyElement.value) || 0;
+
+    if (quantity <= 0) {
+      alert("Please enter a quantity greater than 0");
+      return;
+    }
+
+    const [flavour, priceStr] = selectElement.value.split(":");
+    const price = parseInt(priceStr);
+
+    const item = {
+      name: itemName,
+      flavour: flavour.trim(),
+      price,
+      quantity
+    };
+
+    cart.push(item);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCart();
+    qtyElement.value = 0;
+showToast("Item added to cart!");
+  }
+function showToast(message) {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.classList.add("show");
+    toast.classList.remove("hidden");
+    setTimeout(() => {
+      toast.classList.remove("show");
+      toast.classList.add("hidden");
+    }, 2000);
+  }
+
+  // Remove an item from the cart
+  function removeCartItem(index) {
+    cart.splice(index, 1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCart();
+  }
+
+  // Update cart display
+  function updateCart() {
+    const cartItemsDiv = document.getElementById('cart-items');
+    const totalAmountDiv = document.getElementById('total-amount');
+    cartItemsDiv.innerHTML = '';
+
+    if (cart.length === 0) {
+      cartItemsDiv.innerHTML = '<p>Your cart is empty!</p>';
+      totalAmountDiv.textContent = '₹0';
+      return;
+    }
+
+    // Header row
+    const header = document.createElement('div');
+    header.className = 'font-bold mb-2 grid grid-cols-5 gap-4';
+    header.innerHTML = `
+      <span>Item</span>
+      <span>Variant</span>
+      <span>Qty</span>
+      <span>Total Price</span>
+      <span></span>
+    `;
+    cartItemsDiv.appendChild(header);
+
+    let totalPrice = 0;
+
+    // Each cart item
+    cart.forEach((item, index) => {
+      const itemTotal = item.quantity * item.price;
+      totalPrice += itemTotal;
+
+      const row = document.createElement('div');
+      row.className = 'grid grid-cols-5 gap-4 mb-1 text-sm items-center';
+      row.innerHTML = `
+        <span>${item.name}</span>
+        <span>${item.flavour}</span>
+        <span>${item.quantity}</span>
+        <span>${item.quantity} x ₹${item.price} = ₹${itemTotal}</span>
+        <button onclick="removeCartItem(${index})" class="text-red-600 hover:underline text-sm">Remove</button>
+      `;
+      cartItemsDiv.appendChild(row);
+    });
+
+    // Total Price
+    totalAmountDiv.textContent = `₹${totalPrice}`;
+  }
+
+
+  // Initial cart update on page load
+  updateCart();
+</script>
+
+</body>
+</html>

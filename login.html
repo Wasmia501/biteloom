@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Wasmi's Snacks</title>
+  <link rel="stylesheet" href="homestyle.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f5f1f0; /* Cream background */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .form-container {
+      background-color: #f9f0f1; /* Light cream color */
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 16px rgba(128, 0, 32, 0.3); /* Burgundy shadow */
+      text-align: center;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .form-container h2 {
+      margin-bottom: 25px;
+      color: #800020; /* Burgundy */
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #6b4444;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ffcce0;
+      border-radius: 10px;
+      font-size: 1rem;
+      background-color: #fff;
+    }
+
+    button {
+      width: 100%;
+      background-color: #800020; /* Burgundy */
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #660016; /* Darker burgundy */
+    }
+
+    .form-note {
+      margin-top: 15px;
+      font-size: 0.9rem;
+    }
+
+    .form-note a {
+      color: #800020; /* Burgundy link */
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .form-note a:hover {
+      text-decoration: underline;
+    }
+
+    /* 🌐 Mobile & Tablet Responsive */
+    @media (max-width: 768px) {
+      .form-container {
+        padding: 25px 20px;
+      }
+
+      .form-container h2 {
+        font-size: 2rem;
+      }
+
+      input {
+        font-size: 0.95rem;
+      }
+
+      button {
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 20px;
+      }
+
+      .form-container {
+        padding: 20px 15px;
+      }
+
+      .form-container h2 {
+        font-size: 1.8rem;
+      }
+
+      input {
+        padding: 10px;
+      }
+
+      button {
+        padding: 10px;
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <input type="email" placeholder="Email" name="email" required />
+      <input type="password" placeholder="Password" name="password" required />
+      <button type="submit">Login</button>
+    </form>
+    <p class="form-note">Don't have an account? <a href="signup.html">Sign up</a></p>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();  // Prevent form submission
+
+      // Optionally, you can check if the email and password are correct here (for demo purposes, it's skipped)
+      // If you want to add some form validation, you can add that too
+
+      alert('Login successful!');  // Show success message
+      window.location.href = "menu new.html";  // Redirect to the menu page
+    });
+  </script>
+</body>
+</html>
