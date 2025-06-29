@@ -11,11 +11,18 @@ Biteloom is a cute, user-friendly snack ordering website built to showcase and s
 -  Proceed to a dynamic payment page with cart summary
 -  Data persistence with localStorage
 
-## Screenshots
+## 🖼️ Screenshots
 
-| Menu Page | Cart Summary | Payment Page |
-|-----------|--------------|--------------|
-| ![Menu](screenshots/menu.png) | ![Cart](screenshots/cart.png) | ![Payment](screenshots/payment.png) |
+Here’s a glimpse of the Biteloom user experience — soft, cute, and easy to use! 💕
+
+| Home Page | Menu Page |
+|-----------|-----------|
+| ![Home](screenshots/home.png) | ![Menu](screenshots/menu.png) |
+
+| Cart Page | Payment Page |
+|-----------|--------------|
+| ![Cart](screenshots/cart.png) | ![Payment](screenshots/payment.png) |
+
 
 ## Tech Stack
 
