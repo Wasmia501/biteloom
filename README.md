@@ -32,16 +32,6 @@ Here’s a glimpse of the Biteloom user experience — soft, cute, and easy to u
 - Soft pastel UI theme (pink, lavender, grey)
 - `localStorage` for saving cart and item quantities
 
-## Project Structure
-biteloom/
-├── index.html # Main menu page
-├── payment.html # Payment/cart page
-├── styles.css # Custom styling
-├── script.js # Main logic for cart and interaction
-├── assets/ # Images, icons, logos
-└── README.md # This file
-
-
 ## Getting Started
 
 1. Clone the repo:
